@@ -29,4 +29,26 @@ optional arguments:
   -v, --verbose  Verbose
   ```
 
+  # Docker 
 
+Pull image
+```bash
+docker pull zavolab/zpca
+```
+
+Run
+```bash
+docker run -it zavolab/zpca zpca --help
+```
+
+# Singularity
+
+Pull image
+```bash
+singularity pull docker://zavolab/zpca
+```
+
+Run
+```bash
+singularity exec zpca_latest.sif zpca --help
+```
