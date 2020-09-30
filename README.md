@@ -6,7 +6,7 @@ PCA analysis
 
 ```bash
 # clone the repo
-git clone https://github.com/zavolanlab/pca.git
+git clone https://github.com/zavolanlab/zpca.git
 # create a virtual environment
 python3 -m venv venv
 # activate the virtual environment

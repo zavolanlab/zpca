@@ -76,6 +76,15 @@ def main():
     if options.verbose:
         sys.stdout.write(f"Reading: {options.tpm} {os.linesep}")
     df = pd.read_csv(options.tpm, header=0, index_col=0, sep="\t")
+    
+    if options.verbose:
+        sys.stdout.write(f"Adding pseudocount of 1/32 {os.linesep}")
+    df = df + 1/32
+    
+    if options.verbose:
+        sys.stdout.write(f"Log2 transform the data {os.linesep}")
+    df = np.log2(df)
+
 
     samples = list(df.shape)[1]
     if samples == 1:
