@@ -13,7 +13,7 @@ requirements = [
 
 setup(
     name='zpca',
-    version='0.1',
+    version='0.2',
     description="gtf conversion utility.",
     author="Foivos Gypas",
     author_email='fgypas@gmail.com',
