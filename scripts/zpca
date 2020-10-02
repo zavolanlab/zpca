@@ -12,11 +12,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from argparse import ArgumentParser, RawTextHelpFormatter
 
-# _____________________________________________________________________________
-# -----------------------------------------------------------------------------
-# Main function
-# -----------------------------------------------------------------------------
-
+from zpca.zpca import counts2tpm
 
 def main():
     """ Main function """
@@ -29,11 +25,44 @@ def main():
     )
 
     parser.add_argument(
-        "--tpm",
-        dest="tpm",
-        help="TPM table (tsv).",
+        "--counts",
+        dest="counts",
+        help="Counts table (tsv). The first column should contain the gene/transcript id. The other columns should contain the counts for each sample.",
         required=True,
         metavar="FILE"
+    )
+
+    parser.add_argument(
+        "--lengths",
+        dest="lengths",
+        help="Table of feature lengths (tsv). The first column should contain the gene/transcript id. The second column should contain the corresponding lengths",
+        required=True,
+        metavar="FILE"
+    )
+
+    parser.add_argument(
+        "--pseudocount",
+        dest="pseudocount",
+        default=1,
+        help="Pseudocount to add in the count table. Default: 1",
+        required=False,
+    )
+
+    parser.add_argument(
+        "--tpm-filter",
+        dest="tpm_filter",
+        default=0,
+        help="Filter genes/transcripts with mean expression less than the provided filter. Default: 0",
+        required=False,
+    )
+
+    parser.add_argument(
+        "--filter-not-expressed",
+        dest="filter_not_expressed",
+        default=False, 
+        action='store_true',
+        help="Filter not expressed genes/transcripts (0 counts for all samples).",
+        required=False,
     )
 
     parser.add_argument(
@@ -54,10 +83,6 @@ def main():
         help="Verbose"
     )
 
-    # _________________________________________________________________________
-    # -------------------------------------------------------------------------
-    # get the arguments
-    # -------------------------------------------------------------------------
     try:
         options = parser.parse_args()
     except(Exception):
@@ -74,23 +99,35 @@ def main():
         os.makedirs(options.out)
 
     if options.verbose:
-        sys.stdout.write(f"Reading: {options.tpm} {os.linesep}")
-    df = pd.read_csv(options.tpm, header=0, index_col=0, sep="\t")
-    
+        sys.stdout.write(f"Reading: {options.counts} {os.linesep}")
+    df = pd.read_csv(options.counts, header=0, index_col=0, sep="\t")
+
     if options.verbose:
-        sys.stdout.write(f"Adding pseudocount of 1/32 {os.linesep}")
-    df = df + 1/32
+        sys.stdout.write(f"Reading: {options.lengths} {os.linesep}")
+    lengths =  pd.read_csv(options.lengths, header=0, index_col=0, sep="\t")
+
+    if options.filter_not_expressed:
+        if options.verbose:
+            sys.stdout.write(f"Filtering not expressed genes/transcripts {os.linesep}")
+        df = df[df.sum(axis=1)>0]
+        
+    if options.verbose:
+        sys.stdout.write(f"Adding a pseudocount of {options.pseudocount} {os.linesep}")
+    df = df + float(options.pseudocount)
+
+    if options.verbose:
+        sys.stdout.write(f"Converting the data to TPM {os.linesep}")
+    tpm = counts2tpm(df, lengths)
     
     if options.verbose:
         sys.stdout.write(f"Log2 transform the data {os.linesep}")
-    df = np.log2(df)
-
+    tpm = np.log2(tpm)
 
     samples = list(df.shape)[1]
     if samples == 1:
         n_components = 1
         sys.stderr.write(f"Too few samples for PCA {os.linesep}")
-        sys.exit(-1)
+        sys.exit(0)
     elif samples == 2:
         n_components = 2
     else:
