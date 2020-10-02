@@ -18,15 +18,27 @@ pip install .
 # Run
 
 ```bash
-usage: zpca [-h] --tpm FILE --out FILE [-v]
+zpca --help
+```
 
-Perform PCA based on a table (rows are genes/transcripts, columns are samples).
+```
+usage: zpca [-h] --counts FILE --lengths FILE [--pseudocount PSEUDOCOUNT]
+            [--tpm-filter TPM_FILTER] [--filter-not-expressed] --out DIRECTORY
+            [-v]
+
+Perform PCA based on an expression matrix (rows are genes/transcripts, columns are samples).
 
 optional arguments:
-  -h, --help     show this help message and exit
-  --tpm FILE     TPM table (tsv)
-  --out FILE     Output directory
-  -v, --verbose  Verbose
+  -h, --help            show this help message and exit
+  --counts FILE         Counts table (tsv). The first column should contain the gene/transcript id. The other columns should contain the counts for each sample.
+  --lengths FILE        Table of feature lengths (tsv). The first column should contain the gene/transcript id. The second column should contain the corresponding lengths
+  --pseudocount PSEUDOCOUNT
+                        Pseudocount to add in the count table. Default: 1
+  --tpm-filter TPM_FILTER
+                        Filter genes/transcripts with mean expression less than the provided filter. Default: 0
+  --filter-not-expressed
+                        Filter not expressed genes/transcripts (0 counts for all samples).
+  --out DIRECTORY       Output directory
   ```
 
   # Docker 
