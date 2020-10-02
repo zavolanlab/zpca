@@ -13,8 +13,8 @@ requirements = [
 
 setup(
     name='zpca',
-    version='0.2',
-    description="gtf conversion utility.",
+    version='0.3',
+    description="PCA analysis for genes or transcripts.",
     author="Foivos Gypas",
     author_email='fgypas@gmail.com',
     url='',
