@@ -13,7 +13,7 @@ requirements = [
 
 setup(
     name='zpca',
-    version='0.3',
+    version='0.4',
     description="PCA analysis for genes or transcripts.",
     author="Foivos Gypas",
     author_email='fgypas@gmail.com',
