@@ -31,7 +31,13 @@ Perform PCA based on an expression matrix (rows are genes/transcripts, columns a
 optional arguments:
   -h, --help            show this help message and exit
   --counts FILE         Counts table (tsv). The first column should contain the gene/transcript id. The other columns should contain the counts for each sample.
-  --lengths FILE        Table of feature lengths (tsv). The first column should contain the gene/transcript id. The second column should contain the corresponding lengths
+  --lengths FILE        Table of feature lengths (tsv). 
+                        The file can have two types of formats.
+                        First option: The first column should contain the gene/transcript id.
+                        The second column should contain the corresponding lengths
+                        Second option: The first column should contain the gene/transcript id.
+                        The rest of the columns should contain the gene/transcript lengths for each of the samples
+                        Note that the sample names should be the same the sample names of the counts.
   --pseudocount PSEUDOCOUNT
                         Pseudocount to add in the count table. Default: 1
   --tpm-filter TPM_FILTER
@@ -39,6 +45,7 @@ optional arguments:
   --filter-not-expressed
                         Filter not expressed genes/transcripts (0 counts for all samples).
   --out DIRECTORY       Output directory
+  -v, --verbose         Verbose
   ```
 
   # Docker 

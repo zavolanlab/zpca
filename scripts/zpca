@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from argparse import ArgumentParser, RawTextHelpFormatter
 
-from zpca.zpca import counts2tpm
+from zpca.zpca import counts2tpm, counts2tpm_many
 
 def main():
     """ Main function """
@@ -35,7 +35,14 @@ def main():
     parser.add_argument(
         "--lengths",
         dest="lengths",
-        help="Table of feature lengths (tsv). The first column should contain the gene/transcript id. The second column should contain the corresponding lengths",
+        help="Table of feature lengths (tsv). " + os.linesep +
+             "The file can have two types of formats." + os.linesep +
+             "First option: The first column should contain the gene/transcript id." + os.linesep +
+             "The second column should contain the corresponding lengths" + os.linesep +
+             "Second option: The first column should contain the gene/transcript id." + os.linesep +
+             "The rest of the columns should contain the gene/transcript lengths for each of the samples" + os.linesep +
+             "Note that the sample names should be the same the sample names of the counts."
+             ,
         required=True,
         metavar="FILE"
     )
@@ -106,6 +113,10 @@ def main():
         sys.stdout.write(f"Reading: {options.lengths} {os.linesep}")
     lengths =  pd.read_csv(options.lengths, header=0, index_col=0, sep="\t")
 
+    mode_lengths = "one"
+    if int(lengths.shape[1])>2:
+        mode_lengths = "many"
+
     if options.filter_not_expressed:
         if options.verbose:
             sys.stdout.write(f"Filtering not expressed genes/transcripts {os.linesep}")
@@ -117,7 +128,10 @@ def main():
 
     if options.verbose:
         sys.stdout.write(f"Converting the data to TPM {os.linesep}")
-    tpm = counts2tpm(df, lengths)
+    if mode_lengths == "one":
+        tpm = counts2tpm(df, lengths)
+    elif mode_lengths == "many":
+        tpm = counts2tpm_many(df, lengths)
     
     if options.verbose:
         sys.stdout.write(f"Log2 transform the data {os.linesep}")
@@ -262,7 +276,6 @@ def main():
 # -----------------------------------------------------------------------------
 # Call the Main function and catch Keyboard interrups
 # -----------------------------------------------------------------------------
-
 
 if __name__ == '__main__':
     try:
