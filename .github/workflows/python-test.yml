@@ -34,3 +34,14 @@ jobs:
     - name: Test with pytest
       run: |
         pytest tests/test.py
+
+
+  finish:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Coveralls Finished
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.REPO_TOKEN }}
+        parallel-finished: true
