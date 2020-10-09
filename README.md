@@ -17,14 +17,43 @@ pip install .
 
 # Run
 
+zpca consists of two tools:
+- zpca-tpm
+- zpca-counts
+
+When you run
 ```bash
-zpca --help
+zpca-tpm --help
 ```
 
+The following message should appear
 ```
-usage: zpca [-h] --counts FILE --lengths FILE [--pseudocount PSEUDOCOUNT]
-            [--tpm-filter TPM_FILTER] [--filter-not-expressed] --out DIRECTORY
-            [-v]
+usage: zpca-tpm [-h] --tpm FILE [--tpm-filter TPM_FILTER]
+                [--tpm-pseudocount TPM_PSEUDOCOUNT] --out FILE [-v]
+
+Perform PCA based on a TPM expression matrix (rows are genes/transcripts, columns are samples).
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --tpm FILE            TPM table (tsv).
+  --tpm-filter TPM_FILTER
+                        Filter genes/transcripts with mean expression less than the provided filter. Default: 1
+  --tpm-pseudocount TPM_PSEUDOCOUNT
+                        Pseudocount to add in the tpm table. Default: 1
+  --out FILE            Output directory
+  -v, --verbose         Verbose
+  ```
+
+When you run
+```bash
+zpca-counts --help
+```
+
+The following message should appear
+```
+usage: zpca-counts [-h] --counts FILE --lengths FILE
+                   [--pseudocount PSEUDOCOUNT] [--filter-not-expressed] --out
+                   DIRECTORY [-v]
 
 Perform PCA based on an expression matrix (rows are genes/transcripts, columns are samples).
 
@@ -40,15 +69,14 @@ optional arguments:
                         Note that the sample names should be the same the sample names of the counts.
   --pseudocount PSEUDOCOUNT
                         Pseudocount to add in the count table. Default: 1
-  --tpm-filter TPM_FILTER
-                        Filter genes/transcripts with mean expression less than the provided filter. Default: 0
   --filter-not-expressed
                         Filter not expressed genes/transcripts (0 counts for all samples).
   --out DIRECTORY       Output directory
   -v, --verbose         Verbose
-  ```
+```
 
-  # Docker 
+
+# Docker 
 
 Pull image
 ```bash

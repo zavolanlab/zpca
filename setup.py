@@ -13,7 +13,7 @@ requirements = [
 
 setup(
     name='zpca',
-    version='0.4',
+    version='0.5',
     description="PCA analysis for genes or transcripts.",
     author="Foivos Gypas",
     author_email='fgypas@gmail.com',
@@ -21,7 +21,7 @@ setup(
     packages=['zpca'],
     package_dir={'zpca': 'zpca'},
     include_package_data=True,
-    scripts=['scripts/zpca'],
+    scripts=['scripts/zpca-counts', 'scripts/zpca-tpm'],
     install_requires=requirements,
     keywords='zpca',
     classifiers=[
