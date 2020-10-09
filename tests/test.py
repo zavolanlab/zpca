@@ -81,6 +81,10 @@ def test_counts2tpm_many():
     for i, row in corr.T.iteritems():
         assert row[0] > 0.99
 
-def test_zpca_path(script_runner):
-    ret = script_runner.run('zpca', '--help')
+def test_zpca_counts_path(script_runner):
+    ret = script_runner.run('zpca-counts', '--help')
+    assert ret.success
+    
+def test_zpca_tpm_path(script_runner):
+    ret = script_runner.run('zpca-tpm', '--help')
     assert ret.success
