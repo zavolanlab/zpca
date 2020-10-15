@@ -37,8 +37,8 @@ def main():
     parser.add_argument(
         "--tpm-filter",
         dest="tpm_filter",
-        default=1,
-        help="Filter genes/transcripts with mean expression less than the provided filter. Default: 1",
+        default=0,
+        help="Filter genes/transcripts with mean expression less than the provided filter. Default: 0",
         required=False,
     )
     
