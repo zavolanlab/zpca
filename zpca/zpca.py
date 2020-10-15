@@ -28,7 +28,7 @@ def perform_pca(df, n_components):
 
     df = df.astype(float)
 
-    scaled_data = preprocessing.scale(df, with_std=False)
+    scaled_data = preprocessing.scale(df.T, with_std=False)
 
     pca = PCA(n_components=n_components)
     pca.fit(scaled_data)
