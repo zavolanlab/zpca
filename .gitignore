@@ -127,3 +127,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+test_data/TRANSCRIPT_TPM_2_SAMPLES/
+test_data/TRANSCRIPT_TPM_1_SAMPLE/

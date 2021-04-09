@@ -15,8 +15,6 @@ def determine_number_of_components(df):
     samples = list(df.shape)[1]
     if samples == 1:
         n_components = 1
-        sys.stderr.write(f"Too few samples for PCA {os.linesep}")
-        sys.exit(0)
     elif samples == 2:
         n_components = 2
     else:
