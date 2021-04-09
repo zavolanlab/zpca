@@ -16,6 +16,10 @@ TRANSCRIPT_TPM_2_SAMPLES = "test_data/transcripts_tpm_2_samples.tsv"
 TRANSCRIPT_TPM_2_SAMPLES_PCA = "test_data/transcripts_tpm_2_samples_PCA.tsv"
 TRANSCRIPT_TPM_2_SAMPLES_scree = "test_data/transcripts_tpm_2_samples_scree.tsv"
 
+TRANSCRIPT_TPM_1_SAMPLE = "test_data/transcripts_tpm_1_sample.tsv"
+TRANSCRIPT_TPM_1_SAMPLE_PCA = "test_data/transcripts_tpm_1_sample_PCA.tsv"
+TRANSCRIPT_TPM_1_SAMPLE_scree = "test_data/transcripts_tpm_1_sample_scree.tsv"
+
 def test_counts2tpm():
 
     counts = pd.read_csv(
@@ -100,15 +104,26 @@ def test_zpca_tpm_2_samples(script_runner):
                             '--out', 
                             'test_data/TRANSCRIPT_TPM_2_SAMPLES', 
                             '--verbose')
-    pca_out = pd.read_csv("test_data/TRANSCRIPT_TPM_2_SAMPLES/PCA.tsv", header=0, sep="\t")
-    pca_control = pd.read_csv(TRANSCRIPT_TPM_2_SAMPLES_PCA, header=0, sep="\t")
+    pca_out = pd.read_csv("test_data/TRANSCRIPT_TPM_2_SAMPLES/PCA.tsv", header=0, sep="\t", index_col=0)
+    pca_control = pd.read_csv(TRANSCRIPT_TPM_2_SAMPLES_PCA, header=0, sep="\t", index_col=0)
     
-    corr = pd.DataFrame(pca_out.corrwith(pca_control, axis = 0))
-
-    for i, row in corr.T.iteritems():
-        assert row[0] > 0.99
+    assert pca_out.shape == pca_control.shape
     
     scree_out = pd.read_csv("test_data/TRANSCRIPT_TPM_2_SAMPLES/scree.tsv", header=0, sep="\t", index_col=0)
     scree_control = pd.read_csv(TRANSCRIPT_TPM_2_SAMPLES_scree, header=0, sep="\t", index_col=0)
     
-    assert scree_out.equals(scree_control)
+    assert scree_out.shape == scree_control.shape
+    
+def test_zpca_tpm_1_sample(script_runner):
+    ret = script_runner.run('zpca-tpm', 
+                            '--tpm', 
+                            TRANSCRIPT_TPM_1_SAMPLE, 
+                            '--out', 
+                            'test_data/TRANSCRIPT_TPM_1_SAMPLE', 
+                            '--verbose')
+    filesize_pca = os.path.getsize("test_data/TRANSCRIPT_TPM_1_SAMPLE/PCA.tsv")
+    filesize_scree = os.path.getsize("test_data/TRANSCRIPT_TPM_1_SAMPLE/scree.tsv")
+
+    assert  filesize_pca == 0
+    assert filesize_scree == 0
+    

@@ -101,6 +101,17 @@ def main():
 
     n_components = determine_number_of_components(df)
     
+    if n_components == 1:
+        w = open(os.path.join(options.out, "PCA.tsv"), 'w')
+        w.write(f"")
+        w.close()
+        w = open(os.path.join(options.out, "scree.tsv"), 'w')
+        w.write(f"")
+        w.close()
+        sys.stderr.write(f"Too few samples for PCA {os.linesep}")
+        sys.stderr.write(f"Exiting {os.linesep}")
+        sys.exit(0)
+    
     scaled_data, pca_data, per_var, labels, = perform_pca(df, n_components)
     
     if options.verbose:
